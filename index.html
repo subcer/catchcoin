@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="Shortcut Icon" type="image/x-icon" href="img/coin.png" />
+    <link rel="stylesheet" href="./styles/styles.css">
+    <script src="./javascript/jquery.js"></script>
+    <!--要做css渲染完成後再執行js-->
+    <title>接金幣遊戲</title>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="boardImg">
+            <div id="countdown">
+                <p>倒數</p>
+                <p id="timecount">0</p>
+            </div>
+            <div id="score">
+                <p>分數</p>
+                <p id="count">0</p>
+            </div>
+        </div>
+        <div id="cointest" class="coin"></div>
+        <div id="pot"></div>
+        <div id="startButton">
+            <div id="startgame" onclick="startgame();countdown();">Start</div>
+        </div>
+        <div id="rank">
+            <p id="scorename">總得分</p>
+            <p id="point">0</p>
+        </div>
+    </div>
+    <div id="rect1"></div>
+    <div id="rect2"></div>
+    <script src="javascript/action.js"></script>
+</body>
+</html>

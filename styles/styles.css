@@ -1,0 +1,144 @@
+*{
+    margin: 0;
+    padding: 0;    
+}
+html,body{
+    width: 100%;
+    height: 100%;
+}
+ul,li{
+    list-style-type:none;
+}
+a {
+    text-decoration:none;
+    color: black;
+}
+#wrapper{
+    width: 100%;
+    height: 100%;
+    background-color: blanchedalmond;
+    position: relative;
+    overflow: hidden;
+}
+#startButton{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: .3;
+    position: absolute;
+    z-index: 3;
+}
+#startgame{
+    width: 100px;
+    height: 50px;
+    border: solid 5px #ffd700;
+    border-radius: 30%;
+    color: #ffd700;
+    line-height: 120%;
+    font-size: 40px;
+    padding-left: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px;
+    cursor: pointer;    
+}
+.coin{
+    width: 45px;
+    height: 45px;
+    background-image: url('../img/dollar.png');
+    background-size: cover;
+    position: absolute;
+    top:-45px;
+    /*transform: rotate(0deg);*/
+    transform-origin:50% 100%;
+}
+#pot{
+    width: 128px;
+    height: 128px;
+    background-image: url('../img/vase.png');
+    background-size: cover;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform-origin:50% 0%;
+}
+.boardImg{
+    width: 192px;
+    height: 192px;
+    background-image: url('../img/signboard.png');
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    z-index: 2;
+    
+}
+#countdown{
+    width: 64px;
+    height: 64px;    
+    position: absolute;
+    top: 100px;
+    left: 10px;
+    text-align: center;
+    color: #880000;
+}
+#score{
+    width: 64px;
+    height: 64px;    
+    position: absolute;
+    top: 100px;
+    right: 35px;
+    text-align: center;
+    color: #880000;  
+}
+.display{
+    display: none !important;
+}
+#cointest{
+    top:0px;
+    left: 30px;
+}
+#rect1{
+    width: 50px;
+    height: 50px;
+    background-color: #ffd700;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+#rect2{
+    width: 10px;
+    height: 10px;
+    background-color: #880000;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+#rank{
+    width: 400px;
+    height: 500px;
+    background-color: white;
+    opacity: 0.6;
+    border-radius: 5%;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-top: -250px;
+    margin-left: -200px;
+    padding-top: 50px;
+    display: none;
+}
+#scorename{
+    width:100%;
+    text-align:center;
+    margin: 0 auto;
+    font-size: 50px;
+    margin-bottom: 100px;
+}
+#point{
+    width: 100%;
+    text-align:center;
+    margin: 0 auto;
+    font-size: 50px;
+}
