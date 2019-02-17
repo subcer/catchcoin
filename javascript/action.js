@@ -71,6 +71,7 @@ $( document ).keyup(function(){
 });
 
 
+
 //隨機生成金幣和落下速度
 var newcoin;//生成金幣
 var randomcoinposition; //金幣隨機位置
