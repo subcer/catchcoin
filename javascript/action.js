@@ -48,26 +48,29 @@ function countdown(){
 }
 
 //壺 左右移動
-var windoWidth = $(window).width();
+var windoWidth = $('#wrapper').width();
 var potImgWidth = parseInt($('#pot').css('width'));
 var x;//用於視窗寬減壺寬
-var Item = $('#pot');
-var ItemPosition = parseInt(Item.css('left'));
+var Item = { //壺的物件
+    object:$('#pot'),
+    x:parseInt($('#pot').css('left')),
+    y:parseInt($('#pot').css('top'))
+};
 var keyleft = false,keyright = false;
 setInterval(()=>{
     if(keyleft==true){
         //console.log(ItemPosition);
-        if(ItemPosition >= 20){
-            ItemPosition = ItemPosition -= 10;
-            Item.css('left',ItemPosition);
+        if(Item.x >= 10){
+            Item.x = Item.x -= 10;
+            Item.object.css('left', Item.x);
         }
     }
     else if(keyright == true){
         //console.log(ItemPosition);
         x = windoWidth-potImgWidth;
-        if(ItemPosition < x){
-            ItemPosition = ItemPosition += 10;
-            Item.css('left',ItemPosition);
+        if(Item.x < x){
+            Item.x = Item.x += 10;
+            Item.object.css('left', Item.x);
         }
     }
 },25);
@@ -109,10 +112,10 @@ function generate(){
         object: newcoin,
         speed: randomspeed,
         x: randomcoinposition,
-        y: -45
+        y: -45,
+        alife:true
     };
 }
-//console.log(arr,arrallspeed);
 
 //金幣落下
 var windowHight = $(window).height();
@@ -120,27 +123,31 @@ function update(arrCoin){
     arrCoin.object.css('top',arrCoin.y+'px');
     if(parseInt(arrCoin.object.css('top')) > windowHight){
         arrCoin.object.remove();
+        arrCoin.alife = false;
     }
 }
 
 //金幣與壺碰撞
 function collision(arrCoin){
-    var coinX,coinY,potX,potY;
+    var coinX,coinY;
 
-    potX = parseInt($('#pot').css('left'));
-    potY = parseInt($('#pot').css('top'));
     coinX = parseInt(arrCoin.x);
     coinY = parseInt(arrCoin.y);
 
-    if(coinX+20 < potX + 96 && coinX + 25 > potX +32  && coinY < potY+1  && 45 + coinY > potY){
-        arrCoin.object.remove();
-        score();
+    if(arrCoin.alife){
+        if(coinX+20 < Item.x + 96 && coinX + 25 > Item.x +32  && coinY < Item.y+1  && 45 + coinY > Item.y){
+            arrCoin.object.remove();
+            arrCoin.alife = false;
+            score();
+        }
     }
 }
 
 //計分
-var add = parseInt(document.getElementById('count').innerHTML);
+var add = 0;
 function score(){
     add += 1;
     document.getElementById('count').innerHTML = add;
 }
+
+//1.不要動態生成   2.延遲掉落    3.金幣到底後回到最上面 重複利用   4.最後幾秒不要掉落
