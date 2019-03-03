@@ -3,47 +3,79 @@ var d1;
 function startgame(){
     $('#startButton').css('display','none');
     d1 = new Date().getTime();
-    console.log(d1);
+    //console.log(d1);
     circle();
+    delayFunc();
     countdown();
+    createsounds();
 }
 
 //循環生產
 var circletime;
 function circle(){
-    circletime = setTimeout(()=>{
-        for(i = 0;i < 5;i++){
-            generate();
-        }
-        circle();
-    },1000);
-}
-function stopcircle(){
-    clearTimeout(circletime);
+    for(i = 0;i < coincount ;i++){
+        generate();
+    }
 }
 
 //倒數計時
-var time = 31;
+var time = 60;
+var t = 1;
+var delaydrop;
+var allScore = {
+    object: $('#rank'),
+    point: $('#point')
+}
+function delayFunc(){
+    delaydrop = setInterval(()=>{
+        t += 1;
+    },500);
+}
+function cleardelay(){
+    clearInterval(delaydrop);
+}
 function countdown(){
     window.requestAnimationFrame(countdown);
     if(new Date().getTime()-d1 < time*1000 ){
         document.getElementById('timecount').innerHTML=parseInt((time*1000-(new Date().getTime()-d1))/1000);
-        //console.log(new Date().getTime()-d1);
-        for( i=0 ;i < arr.length ; i++)
-        {
-            arr[i].y += arr[i].speed;
-            update(arr[i]);
-            collision(arr[i]);
+
+        if(t < coincount){
+            
+            for( i=0 ;i < t; i++)
+            {
+                arr[i].y += arr[i].speed;
+                update(arr[i]);
+                collision(arr[i]);
+            }
         }
+        else{
+            t = coincount;
+            for( i=0 ;i < t; i++)
+            {                            
+                arr[i].y += arr[i].speed;
+                update(arr[i]);
+                collision(arr[i]);                     
+            }
+        }
+        
+        // for( i=0 ;i < coincount; i++)
+        // {
+        //     arr[i].randomT -= t;
+        //     if(arr[i].randomT == 0){
+        //         arr[i].y += arr[i].speed;
+        //         update(arr[i]);
+        //     }
+        //     collision(arr[i]);
+        // }
+        
     }
     else{
-        stopcircle();
-        for( i=0 ;i < arr.length ; i++)
-        {
-            arr[i].y += arr[i].speed;
-            update(arr[i]);
-            collision(arr[i]);
-        }
+        cleardelay();
+        cancelAnimationFrame(window.requestAnimationFrame(countdown));
+
+        allScore.object.css('display','block');
+        allScore.point.html($('#count').html());
+        
     }    
 }
 
@@ -54,20 +86,21 @@ var x;//用於視窗寬減壺寬
 var Item = { //壺的物件
     object:$('#pot'),
     x:parseInt($('#pot').css('left')),
-    y:parseInt($('#pot').css('top'))
+    y:parseInt($('#pot').css('top')),
+    lightaction:$('.light')
 };
 var keyleft = false,keyright = false;
 setInterval(()=>{
     if(keyleft==true){
         //console.log(ItemPosition);
-        if(Item.x >= 10){
+        if(Item.x >= -10){
             Item.x = Item.x -= 10;
             Item.object.css('left', Item.x);
         }
     }
     else if(keyright == true){
         //console.log(ItemPosition);
-        x = windoWidth-potImgWidth;
+        x = windoWidth-potImgWidth + 15;
         if(Item.x < x){
             Item.x = Item.x += 10;
             Item.object.css('left', Item.x);
@@ -96,15 +129,17 @@ var newcoin;//生成金幣
 var randomcoinposition; //金幣隨機位置
 var coin;
 var idcount= 0;//金幣id
-var coincount = 180;//金幣總數量
+var coincount = 30;//金幣總數量
 var arrallspeed = new Array();//金幣隨機速度
+var randomTdrop; //隨機時間落下倒數
 var arr = new Array();
 function generate(){
     randomcoinposition = Math.floor(Math.random()*windoWidth-45);
     if(randomcoinposition < 0){
         randomcoinposition = 20;
     }
-    randomspeed = Math.floor(Math.random()*2.5)+2.5;    
+    randomspeed = Math.floor(Math.random()*2.5)+2.5;
+    randomTdrop = Math.floor(Math.random()*30);
     var newcoin = $('<div></div>').attr('id','coin'+idcount).addClass('coin').css('left',randomcoinposition+'px');
     idcount +=1;
     $('.boardImg').after(newcoin);
@@ -113,7 +148,8 @@ function generate(){
         speed: randomspeed,
         x: randomcoinposition,
         y: -45,
-        alife:true
+        alife:true,
+        randomT:randomTdrop
     };
 }
 
@@ -121,10 +157,16 @@ function generate(){
 var windowHight = $(window).height();
 function update(arrCoin){    
     arrCoin.object.css('top',arrCoin.y+'px');
-    if(parseInt(arrCoin.object.css('top')) > windowHight){
-        arrCoin.object.remove();
-        arrCoin.alife = false;
+    
+    if(parseInt(arrCoin.object.css('top')) > windowHight && parseInt($('#timecount').html()) > 0){
+        arrCoin.y = -45;
     }
+    else if(parseInt(arrCoin.object.css('top')) > windowHight && parseInt($('#timecount').html()) == 0){
+        arrCoin.y = windowHight + 45;
+        // arrCoin.object.remove();
+        // arrCoin.alife = false;
+    }
+    
 }
 
 //金幣與壺碰撞
@@ -136,11 +178,22 @@ function collision(arrCoin){
 
     if(arrCoin.alife){
         if(coinX+20 < Item.x + 96 && coinX + 25 > Item.x +32  && coinY < Item.y+1  && 45 + coinY > Item.y){
-            arrCoin.object.remove();
-            arrCoin.alife = false;
+            arrCoin.y = -45;
+            light();
             score();
         }
     }
+}
+
+//金幣碰撞後壺口發光 + 聲音
+function light(){
+    Item.lightaction.css('display','block');
+    playaudio();
+
+    setTimeout(()=>{
+        Item.lightaction.css('display','none');
+        stopAudio();
+    },100);
 }
 
 //計分
@@ -150,4 +203,36 @@ function score(){
     document.getElementById('count').innerHTML = add;
 }
 
-//1.不要動態生成   2.延遲掉落    3.金幣到底後回到最上面 重複利用   4.最後幾秒不要掉落
+
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
+const oscillator = audioCtx.createOscillator(); //震盪器
+const gainNode = audioCtx.createGain(); //增益節點 控制音量
+var isPlaying = false;
+
+oscillator.type = 'sine'; //正弦波
+oscillator.frequency.value = 440; //頻率
+oscillator.detune.value = 0; //解譜
+gainNode.gain.value = 0.5; //音量
+oscillator.connect(gainNode);
+function createsounds(){oscillator.start();}
+
+function playaudio(){
+    if(isPlaying == false){
+        gainNode.connect(audioCtx.destination);
+        //oscillator.start();
+        isPlaying = true;
+    }
+}
+function stopAudio(){
+    if(isPlaying){
+        gainNode.disconnect(audioCtx.destination);
+        // oscillator.stop();
+        isPlaying = false;
+    }
+}
+
+
+function restart(){
+    window.location.reload()    
+}
