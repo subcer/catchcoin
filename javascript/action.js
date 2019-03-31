@@ -217,12 +217,14 @@ gainNode.gain.value = 0.5; //音量
 oscillator.connect(gainNode);
 function createsounds(){oscillator.start();}
 
+
 function playaudio(){
     if(isPlaying == false){
         gainNode.connect(audioCtx.destination);
         //oscillator.start();
         isPlaying = true;
     }
+    
 }
 function stopAudio(){
     if(isPlaying){
@@ -230,9 +232,9 @@ function stopAudio(){
         // oscillator.stop();
         isPlaying = false;
     }
+
 }
-
-
 function restart(){
     window.location.reload()    
 }
+
