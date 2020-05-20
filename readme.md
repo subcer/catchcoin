@@ -9,7 +9,7 @@
 但後來發現,沒有壺的流程
 壺在遊戲進程中,直接先生成,並且給予他左右移動的功能:
 
-<script>
+```javascript
 var windoWidth = $('#wrapper').width();
 var potImgWidth = parseInt($('#pot').css('width'));
 var x;//用於視窗寬減壺寬
@@ -52,4 +52,4 @@ $( document ).keyup(function(){
     keyleft = false;
     keyright = false;
 });
-</script>
+```
