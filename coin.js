@@ -1,4 +1,3 @@
-
 function Basic()
 {
     this.x=0;
