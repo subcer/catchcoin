@@ -11,7 +11,6 @@ function startgame(){
 }
 
 //循環生產
-var circletime;
 function circle(){
     for(i = 0;i < coincount ;i++){
         generate();
