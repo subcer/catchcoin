@@ -242,7 +242,7 @@ function score(){
 ```
 ---------------------------------------------------
 ### 音效
-**##### 這是上網找的音效控制**
+##### 這是上網找的音效控制
 ---------------------------------------------------
 ```javascript
 const AudioContext = window.AudioContext || window.webkitAudioContext;
